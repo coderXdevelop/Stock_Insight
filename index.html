@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Stock Insight – Stock Market Courses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar" id="site-navbar">
+        <div class="nav-inner">
+            <a class="brand" href="#home">Stock Insight</a>
+
+            <nav class="nav" id="main-nav">
+                <a class="nav-link" href="#about">About</a>
+                <a class="nav-link" href="#courses">Courses</a>
+                <a class="nav-link" href="#achievements">Achievements</a>
+                <a class="nav-link" href="#contact">Contact</a>
+            </nav>
+
+            <div style="margin-left:12px;display:flex;align-items:center;gap:8px">
+                <button class="cart-btn" id="open-cart" title="View cart">
+                    <span>Cart</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+                <button class="cta" id="nav-enroll">Enroll</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN PAGE CONTENT -->
+    <main id="page-content">
+
+        <!-- HERO -->
+        <section class="hero" id="home">
+            <div class="hero-inner">
+                <div class="hero-text">
+                    <h1>Learn trading with confidence</h1>
+                    <p>Practical courses, real-world strategies, and mentorship to help you trade smarter.</p>
+                    <div class="hero-actions">
+                        <a class="btn-primary" href="#courses">View Courses</a>
+                        <a class="btn-ghost" href="#contact">Get in Touch</a>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <img src="https://img.sanishtech.com/u/e346cada791385a494caf74b509ba76a.png"
+                        alt="Students learning stocks" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+
+            <!-- ABOUT -->
+            <section id="about" class="card about">
+                <h2>About Stock Insight</h2>
+                <p>
+                    Stock Insight is a professional stock market training company focused on
+                    teaching retail traders and students the foundations of investing and active trading.
+                </p>
+                <ul class="bullets">
+                    <li>Experienced traders and instructors</li>
+                    <li>Hands-on live sessions and recordings</li>
+                    <li>Placement & internship assistance for top performers</li>
+                </ul>
+            </section>
+
+            <!-- COURSES -->
+            <section id="courses" class="card courses">
+                <h2>Courses</h2>
+                <div class="grid" id="course-grid">
+                    <article class="course card" data-id="foundations" data-price="299.00" tabindex="0">
+                        <h3>Foundations of Investing</h3>
+                        <p class="muted">8 weeks • Beginner</p>
+                        <p>Understand markets, company analysis, and long-term investing strategies.</p>
+                        <ul>
+                            <li>Understanding financial statements</li>
+                            <li>Valuation fundamentals</li>
+                            <li>Portfolio construction</li>
+                        </ul>
+                        <div class="course-cta">
+                            <button class="add-btn">Add to cart</button>
+                        </div>
+                    </article>
+
+                    <article class="course card" data-id="technical" data-price="199.00" tabindex="0">
+                        <h3>Technical Trading Lab</h3>
+                        <p class="muted">6 weeks • Intermediate</p>
+                        <p>Price action, indicators, and live trade setups focused on practical trading.</p>
+                        <ul>
+                            <li>Support & resistance, trend analysis</li>
+                            <li>Risk & money management</li>
+                            <li>Live-trading afternoons</li>
+                        </ul>
+                        <div class="course-cta">
+                            <button class="add-btn">Add to cart</button>
+                        </div>
+                    </article>
+
+                    <article class="course card" data-id="options" data-price="249.00" tabindex="0">
+                        <h3>Options Strategies Bootcamp</h3>
+                        <p class="muted">4 weeks • Advanced</p>
+                        <p>Options basics to advanced strategies for hedging and income generation.</p>
+                        <ul>
+                            <li>Spreads, iron condors, protective hedges</li>
+                            <li>Volatility and Greeks</li>
+                            <li>Practical position management</li>
+                        </ul>
+                        <div class="course-cta">
+                            <button class="add-btn">Add to cart</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- ACHIEVEMENTS -->
+            <section id="achievements" class="card achievements">
+                <h2>Achievements</h2>
+                <div class="achieve-grid">
+                    <div class="achieve-item"><strong>1,200+</strong><span>Students Trained</span></div>
+                    <div class="achieve-item"><strong>85%</strong><span>Placement Success</span></div>
+                    <div class="achieve-item"><strong>120</strong><span>Live Sessions</span></div>
+                    <div class="achieve-item"><strong>4.8/5</strong><span>Average Rating</span></div>
+                </div>
+            </section>
+
+            <!-- CART -->
+            <section id="cart" class="card">
+                <h2>Your Cart</h2>
+                <div class="cart">
+                    <div>
+                        <div id="cart-empty" class="muted-small">No courses in your cart yet. Click a course to add it.
+                        </div>
+                        <div class="cart-list" id="cart-list" aria-live="polite"></div>
+                    </div>
+
+                    <aside class="cart-sidebar">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div class="muted-small">Items</div>
+                                <strong id="cart-items-count">0</strong>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="muted-small">Estimated total</div>
+                                <strong id="cart-total">₹0.00</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:12px;display:flex;gap:8px;">
+                            <button id="continue-shopping" class="btn-outline">Continue shopping</button>
+                            <button id="checkout-btn" class="btn-primary">Buy</button>
+                        </div>
+
+                    </aside>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="card contact">
+                <h2>Contact Us</h2>
+                <p class="muted">Have a question? Want a demo class? Drop your details below.</p>
+
+                <form id="contact-form" class="contact-form" novalidate>
+                    <div class="form-row">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" type="text" placeholder="Your name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="email">Email</label>
+                        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Tell us how we can help"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button id="submit-btn" type="submit" class="btn-primary">Send Message</button>
+                        <button type="reset" class="btn-ghost">Reset</button>
+                    </div>
+                </form>
+
+                <div class="contact-info">
+                    <p><strong>Email:</strong> <a href="mailto:info@stockinsight.in">info@stockinsight.in</a>
+                    </p>
+                    <p><strong>Phone:</strong> +91 ******</p>
+                    <p><strong>Address:</strong> 123, xyz</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- SUCCESS / ORDER VIEW -->
+    <main id="success-view" class="success-wrap" aria-hidden="true">
+        <div class="success-card" role="status" aria-live="polite">
+            <div class="success-visual" aria-hidden="true">
+                <svg class="checkmark" viewBox="0 0 52 52" aria-hidden="true">
+                    <circle cx="26" cy="26" r="24"></circle>
+                    <path d="M14 27 L22 34 L38 16"></path>
+                </svg>
+            </div>
+
+            <div class="success-body" id="success-body">
+                <h1 id="success-title">Thanks – we got your message</h1>
+                <p id="success-sub">We appreciate you reaching out. Our team at <strong>Stock Insight</strong> will
+                    review and get back to you shortly.</p>
+
+                <div class="success-meta" id="submit-meta"></div>
+
+                <div class="success-actions" id="success-actions">
+                    <a class="btn-primary small" href="#courses" id="meta-explore">Explore Courses</a>
+                    <button class="btn-ghost small" id="meta-home">Return Home</button>
+                </div>
+
+                <p style="margin-top:14px;color:var(--muted);font-size:0.95rem" id="success-extra">
+                    Prefer a faster reply? Write to <a href="mailto:info@stockinsight.example">info@stockinsight.in</a>
+                    or call +91 ******.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- CHECKOUT MODAL -->
+    <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+            <h3 id="checkout-title">Checkout</h3>
+            <p class="muted-small" id="checkout-summary">You're purchasing <strong id="checkout-count">0</strong>
+                course(s)</p>
+
+            <div class="form-row">
+                <label for="buy-name">Full name</label>
+                <input id="buy-name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="form-row">
+                <label for="buy-email">Email</label>
+                <input id="buy-email" type="email" placeholder="you@example.com" required>
+            </div>
+
+            <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
+                <button id="modal-cancel" class="btn-ghost">Cancel</button>
+                <button id="modal-submit" class="btn-primary">Confirm & pay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" id="site-footer">
+        <div class="footer-inner container">
+            <div class="footer-left">
+                <strong>Stock Insight</strong>
+                <p class="muted">Practical stock market education for real traders.</p>
+            </div>
+
+            <div class="footer-right">
+                <nav class="footer-nav">
+                    <a href="#about">About</a>
+                    <a href="#courses">Courses</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+                <small class="muted">© <span id="cyear"></span> Stock Insight. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
