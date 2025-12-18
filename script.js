@@ -340,6 +340,40 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
+// Load existing submissions from memory
+let contactSubmissions = [];
+
+// Function to download all submissions as a text file
+function downloadSubmissionsFile() {
+    if (contactSubmissions.length === 0) {
+        return; // Nothing to download
+    }
+
+    let content = "Stock Insight - Contact Form Submissions\n";
+    content += "=".repeat(50) + "\n\n";
+    
+    contactSubmissions.forEach((submission, index) => {
+        content += `Submission #${index + 1}\n`;
+        content += "-".repeat(30) + "\n";
+        content += `Date & Time: ${submission.timestamp}\n`;
+        content += `Name: ${submission.name}\n`;
+        content += `Email: ${submission.email}\n`;
+        content += `Message: ${submission.message}\n`;
+        content += "\n";
+    });
+    
+    // Create blob and download
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `contact-submissions-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 // Client-side form validation & submission handling (contact)
 contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -371,6 +405,20 @@ contactForm.addEventListener('submit', function (e) {
 
     // simulate async work (e.g., sending to server)
     setTimeout(() => {
+        // Store submission with timestamp
+        const submission = {
+            ...data,
+            timestamp: new Date().toLocaleString('en-IN', { 
+                timeZone: 'Asia/Kolkata',
+                dateStyle: 'full',
+                timeStyle: 'medium'
+            })
+        };
+        contactSubmissions.push(submission);
+        
+        // Automatically download the updated file
+        downloadSubmissionsFile();
+        
         // Show success view
         showSuccess(data, true);
 
@@ -429,6 +477,3 @@ window.addEventListener('popstate', (ev) => {
         history.replaceState({ view: 'home' }, '', window.location.pathname);
     }
 })();
-
-// allow direct links like index.html#contact to scroll to section on load
-if (window.location.hash) setTimeout(() => goToHash(window.location.hash), 120);
