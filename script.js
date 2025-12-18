@@ -212,6 +212,12 @@ modalSubmit.addEventListener('click', () => {
         return;
     }
 
+    // Email validation for checkout
+    if (!isValidEmail(email)) {
+        alert('Please enter a valid email address (e.g., user@example.com)');
+        return;
+    }
+
     // disable buttons briefly to prevent double clicks
     modalSubmit.disabled = true;
     modalSubmit.textContent = 'Processing...';
@@ -327,6 +333,13 @@ function hideSuccess(pushState = true) {
     goToHash('#home');
 }
 
+// Email validation function
+function isValidEmail(email) {
+    // Comprehensive email validation regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+}
+
 // Client-side form validation & submission handling (contact)
 contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -343,6 +356,14 @@ contactForm.addEventListener('submit', function (e) {
     // basic validation
     if (!data.name || !data.email || !data.message) {
         alert('Please fill all fields before sending.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+        return;
+    }
+
+    // Email validation
+    if (!isValidEmail(data.email)) {
+        alert('Please enter a valid email address (e.g., user@example.com)');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Message';
         return;
