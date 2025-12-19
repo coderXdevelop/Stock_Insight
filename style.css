@@ -34,7 +34,9 @@ a {
 .container {
     max-width: var(--max-width);
     margin: 28px auto;
-    padding: 0 var(--container-pad)
+    padding: 20px var(--container-pad);
+    background: #0b1d33;
+    border-radius: 16px;
 }
 
 /* NAVBAR */
