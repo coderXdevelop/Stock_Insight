@@ -351,7 +351,7 @@ function downloadSubmissionsFile() {
 
     let content = "Stock Insight - Contact Form Submissions\n";
     content += "=".repeat(50) + "\n\n";
-    
+
     contactSubmissions.forEach((submission, index) => {
         content += `Submission #${index + 1}\n`;
         content += "-".repeat(30) + "\n";
@@ -361,7 +361,7 @@ function downloadSubmissionsFile() {
         content += `Message: ${submission.message}\n`;
         content += "\n";
     });
-    
+
     // Create blob and download
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -408,17 +408,17 @@ contactForm.addEventListener('submit', function (e) {
         // Store submission with timestamp
         const submission = {
             ...data,
-            timestamp: new Date().toLocaleString('en-IN', { 
+            timestamp: new Date().toLocaleString('en-IN', {
                 timeZone: 'Asia/Kolkata',
                 dateStyle: 'full',
                 timeStyle: 'medium'
             })
         };
         contactSubmissions.push(submission);
-        
+
         // Automatically download the updated file
         downloadSubmissionsFile();
-        
+
         // Show success view
         showSuccess(data, true);
 
@@ -474,6 +474,8 @@ window.addEventListener('popstate', (ev) => {
         showSuccess({ name, email, message }, false);
     } else {
         // ensure correct initial history state
-        history.replaceState({ view: 'home' }, '', window.location.pathname);
+        if (!window.location.hash) {
+            history.replaceState({ view: 'home' }, '', window.location.pathname);
+        }
     }
 })();
