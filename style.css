@@ -35,7 +35,7 @@ a {
     max-width: var(--max-width);
     margin: 28px auto;
     padding: 20px var(--container-pad);
-    background: orange;
+    background: #54135e;
     border-radius: 16px;
 }
 
