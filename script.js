@@ -358,6 +358,7 @@ function downloadSubmissionsFile() {
         content += `Date & Time: ${submission.timestamp}\n`;
         content += `Name: ${submission.name}\n`;
         content += `Email: ${submission.email}\n`;
+        content += `Mobile: ${submission.mobile}\n`;
         content += `Message: ${submission.message}\n`;
         content += "\n";
     });
@@ -384,6 +385,7 @@ contactForm.addEventListener('submit', function (e) {
     const data = {
         name: formData.get('name')?.trim(),
         email: formData.get('email')?.trim(),
+        mobile: formData.get('mobile')?.trim(),
         message: formData.get('message')?.trim()
     };
 
@@ -402,6 +404,15 @@ contactForm.addEventListener('submit', function (e) {
         submitBtn.textContent = 'Send Message';
         return;
     }
+
+    // Mobile number validation
+    if (!data.mobile || data.mobile.length !== 10 || isNaN(data.mobile)) {
+        alert('Please enter a valid 10-digit mobile number');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+        return;
+    }
+
 
     // simulate async work (e.g., sending to server)
     setTimeout(() => {
@@ -424,6 +435,7 @@ contactForm.addEventListener('submit', function (e) {
 
         // reset the form so user doesn't accidentally resubmit
         contactForm.reset();
+        alert("Thank you for your feedback!");
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Message';
     }, 450);
