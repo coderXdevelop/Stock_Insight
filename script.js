@@ -435,7 +435,7 @@ contactForm.addEventListener('submit', function (e) {
 
         // reset the form so user doesn't accidentally resubmit
         contactForm.reset();
-        alert("Thank you for your feedback!");
+        // alert("Thank you for your feedback!"); Make visible if needed
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Message';
     }, 450);
