@@ -39,7 +39,7 @@ const successSub = qs('#success-sub');
 const successExtra = qs('#success-extra');
 const successActions = qs('#success-actions');
 
-// course collection
+
 function readCourseDataFromArticle(article) {
     return {
         id: article.dataset.id || crypto.randomUUID?.() || Math.random().toString(36).slice(2, 9),
@@ -49,11 +49,11 @@ function readCourseDataFromArticle(article) {
     };
 }
 
-// maintain cart in-memory
+
 let cart = [];
 
 function saveCartToSession() {
-    // save to sessionStorage so refresh keeps cart during session
+
     try { sessionStorage.setItem('si_cart_v1', JSON.stringify(cart)); } catch (e) { }
 }
 
@@ -65,14 +65,14 @@ function loadCartFromSession() {
 }
 
 function addToCart(course, showToast = true) {
-    // prevent duplicates by id – if duplicate, ignore or keep single-instance
+
     if (!cart.find(i => i.id === course.id)) {
         cart.push({ ...course });
         saveCartToSession();
         renderCart();
         updateCartBadge();
     } else {
-        // already in cart, inform user
+
         if (showToast) alert('Course already in cart. You can proceed to Buy or add other courses.');
     }
 }
@@ -116,7 +116,7 @@ function renderCart() {
             `;
             cartListEl.appendChild(div);
         });
-        // attach remove handlers
+
         qsa('.remove-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = btn.dataset.id;
@@ -127,21 +127,20 @@ function renderCart() {
     updateCartBadge();
 }
 
-// Hook up course cards to add to cart on click
 (function attachCourseHandlers() {
     const articles = qsa('.course');
     articles.forEach(article => {
         const courseData = readCourseDataFromArticle(article);
-        // add 'click entire card' behaviour except when clicking the button which is handled separately
+
         article.addEventListener('click', (ev) => {
-            // If clicked element is a button inside card, let the button handler handle it separately (we still add to cart)
+
             if (ev.target.closest('.add-btn')) return;
             addToCart(courseData);
-            // go to cart
+
             goToHash('#cart');
             renderCart();
         });
-        // button handler
+
         const btn = article.querySelector('.add-btn');
         if (btn) {
             btn.addEventListener('click', (ev) => {
@@ -151,7 +150,7 @@ function renderCart() {
                 renderCart();
             });
         }
-        // allow keyboard add via Enter when focused
+
         article.addEventListener('keydown', (ev) => {
             if (ev.key === 'Enter' || ev.key === ' ') {
                 ev.preventDefault();
@@ -163,7 +162,6 @@ function renderCart() {
     });
 })();
 
-// small helper to scroll to anchors
 function goToHash(hash) {
     if (!hash) window.scrollTo({ top: 0, behavior: 'smooth' });
     else {
@@ -172,7 +170,6 @@ function goToHash(hash) {
     }
 }
 
-// open cart button behaviour
 openCartBtn.addEventListener('click', () => {
     goToHash('#cart');
     renderCart();
@@ -182,13 +179,11 @@ continueShoppingBtn.addEventListener('click', () => {
     goToHash('#courses');
 });
 
-// checkout flow
 checkoutBtn.addEventListener('click', () => {
     if (!cart.length) {
         alert('Your cart is empty. Please add at least one course.');
         return;
     }
-    // populate modal summary and show modal
     checkoutCount.textContent = cart.length;
     checkoutSummary.innerHTML = `You're purchasing <strong>${cart.length}</strong> course(s) • <strong>₹${cartTotal().toFixed(2)}</strong>`;
     buyName.value = '';
@@ -203,7 +198,6 @@ modalCancel.addEventListener('click', () => {
     modalBackdrop.setAttribute('aria-hidden', 'true');
 });
 
-// purchase confirmation - realistic simulation
 modalSubmit.addEventListener('click', () => {
     const name = buyName.value.trim();
     const email = buyEmail.value.trim();
@@ -212,34 +206,27 @@ modalSubmit.addEventListener('click', () => {
         return;
     }
 
-    // Email validation for checkout
     if (!isValidEmail(email)) {
         alert('Please enter a valid email address (e.g., user@example.com)');
         return;
     }
 
-    // disable buttons briefly to prevent double clicks
     modalSubmit.disabled = true;
     modalSubmit.textContent = 'Processing...';
 
-    // Small simulated delay for realism
     setTimeout(() => {
-        // Build order details
         const orderId = 'SI-' + Math.random().toString(36).slice(2, 9).toUpperCase();
         const date = new Date();
         const items = cart.map(c => ({ title: c.title, price: c.price, level: c.level }));
         const amount = cartTotal();
 
-        // Show success/order confirmation view with order details
         showOrderSuccess({ orderId, date: date.toISOString(), name, email, items, amount });
 
-        // clear cart
         cart = [];
         saveCartToSession();
         renderCart();
         updateCartBadge();
 
-        // reset modal
         modalBackdrop.style.display = 'none';
         modalBackdrop.setAttribute('aria-hidden', 'true');
         modalSubmit.disabled = false;
@@ -247,9 +234,7 @@ modalSubmit.addEventListener('click', () => {
     }, 700);
 });
 
-// Show success view for generic forms (existing contact) and orders
 function showSuccess(data, pushState = true) {
-    // populate tags
     const parts = [];
     if (data.name) parts.push('<div class="tag">Name: ' + safe(data.name) + '</div>');
     if (data.email) parts.push('<div class="tag">Email: ' + safe(data.email) + '</div>');
@@ -259,7 +244,6 @@ function showSuccess(data, pushState = true) {
     }
     submitMeta.innerHTML = parts.join('') || '<div class="muted">No details provided.</div>';
 
-    // generic messaging
     successTitle.textContent = 'Thanks – we got your message';
     successSub.innerHTML = 'We appreciate you reaching out. Our team at <strong>Stock Insight</strong> will review your message and get back to you shortly.';
     successExtra.style.display = '';
@@ -280,9 +264,7 @@ function showSuccess(data, pushState = true) {
     }
 }
 
-// dedicated order success view renderer
 function showOrderSuccess(order, pushState = true) {
-    // order: { orderId, date, name, email, items, amount }
     const parts = [];
     parts.push('<div class="tag">Order: ' + safe(order.orderId) + '</div>');
     parts.push('<div class="tag">Buyer: ' + safe(order.name) + '</div>');
@@ -290,7 +272,6 @@ function showOrderSuccess(order, pushState = true) {
     parts.push('<div class="tag">Amount: ₹' + (order.amount || 0).toFixed(2) + '</div>');
     parts.push('<div class="tag">Date: ' + safe(new Date(order.date).toLocaleString()) + '</div>');
 
-    // items list as readable HTML in success body below the meta
     const itemsHtml = order.items.map(it => `<li>${safe(it.title)} – ${safe(it.level)} – ₹${(it.price || 0).toFixed(2)}</li>`).join('');
     submitMeta.innerHTML = parts.join('') + '<div style="width:100%;margin-top:8px"><strong style="display:block;margin-bottom:6px">Ordered items</strong><ul style="margin:0;padding-left:18px;color:var(--muted)">' + itemsHtml + '</ul></div>';
 
@@ -301,7 +282,6 @@ function showOrderSuccess(order, pushState = true) {
     successView.setAttribute('aria-hidden', 'false');
     pageContent.classList.add('hidden');
 
-    // update history so user can bookmark result (no PII in path query except minimal)
     if (pushState) {
         const params = new URLSearchParams({
             view: 'order',
@@ -312,15 +292,13 @@ function showOrderSuccess(order, pushState = true) {
         history.replaceState({ view: 'order', order }, '', window.location.pathname + window.location.search);
     }
 
-    // Accessibility focus
     const heading = successView.querySelector('h1');
     if (heading) heading.focus?.();
 
-    // (Optional) console log
     console.info('Order placed (client):', order);
 }
 
-// Hide the success view and return to main content
+
 function hideSuccess(pushState = true) {
     successView.style.display = 'none';
     successView.setAttribute('aria-hidden', 'true');
@@ -333,20 +311,16 @@ function hideSuccess(pushState = true) {
     goToHash('#home');
 }
 
-// Email validation function
 function isValidEmail(email) {
-    // Comprehensive email validation regex
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
 }
 
-// Load existing submissions from memory
 let contactSubmissions = [];
 
-// Function to download all submissions as a text file
 function downloadSubmissionsFile() {
     if (contactSubmissions.length === 0) {
-        return; // Nothing to download
+        return;
     }
 
     let content = "Stock Insight - Contact Form Submissions\n";
@@ -363,7 +337,6 @@ function downloadSubmissionsFile() {
         content += "\n";
     });
 
-    // Create blob and download
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -375,7 +348,6 @@ function downloadSubmissionsFile() {
     URL.revokeObjectURL(url);
 }
 
-// Client-side form validation & submission handling (contact)
 contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
     submitBtn.disabled = true;
@@ -389,7 +361,6 @@ contactForm.addEventListener('submit', function (e) {
         message: formData.get('message')?.trim()
     };
 
-    // basic validation
     if (!data.name || !data.email || !data.message) {
         alert('Please fill all fields before sending.');
         submitBtn.disabled = false;
@@ -397,7 +368,6 @@ contactForm.addEventListener('submit', function (e) {
         return;
     }
 
-    // Email validation
     if (!isValidEmail(data.email)) {
         alert('Please enter a valid email address (e.g., user@example.com)');
         submitBtn.disabled = false;
@@ -405,18 +375,19 @@ contactForm.addEventListener('submit', function (e) {
         return;
     }
 
-    // Mobile number validation
-    if (!data.mobile || data.mobile.length !== 10 || isNaN(data.mobile)) {
-        alert('Please enter a valid 10-digit mobile number');
+    const mobile = data.mobile?.replace(/\s+/g, '');
+
+    if (!/^[6-9]\d{9}$/.test(mobile)) {
+        alert('Please enter a valid 10-digit Indian mobile number');
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Message';
         return;
     }
 
+    // keep normalized value
+    data.mobile = mobile;
 
-    // simulate async work (e.g., sending to server)
     setTimeout(() => {
-        // Store submission with timestamp
         const submission = {
             ...data,
             timestamp: new Date().toLocaleString('en-IN', {
@@ -427,47 +398,37 @@ contactForm.addEventListener('submit', function (e) {
         };
         contactSubmissions.push(submission);
 
-        // Automatically download the updated file
         downloadSubmissionsFile();
 
-        // Show success view
         showSuccess(data, true);
 
-        // reset the form so user doesn't accidentally resubmit
         contactForm.reset();
-        // alert("Thank you for your feedback!"); Make visible if needed
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Message';
     }, 450);
 });
 
-// Return Home button on success view
 metaHome.addEventListener('click', () => hideSuccess(true));
 qs('#meta-explore').addEventListener('click', () => {
     hideSuccess(true);
     goToHash('#courses');
 });
 
-// Navbar Enroll button scrolls to contact
 navEnroll.addEventListener('click', () => {
     goToHash('#contact');
 });
 
-// Handle browser back/forward
 window.addEventListener('popstate', (ev) => {
     const state = ev.state;
     if (state && state.view === 'success') {
-        // show success (state.data may exist)
         showSuccess(state.data || {}, false);
     } else if (state && state.view === 'order') {
         showOrderSuccess(state.order || {}, false);
     } else {
-        // show home
         hideSuccess(false);
     }
 });
 
-// If the page loads with query parameters (?name=...&email=...&message=... or ?order=...) show success view
 (function initFromURL() {
     loadCartFromSession();
     renderCart();
@@ -479,13 +440,11 @@ window.addEventListener('popstate', (ev) => {
     const message = params.get('message') || '';
     const order = params.get('order') || '';
     if (order) {
-        // If an order param exists, show a simulated order view with that id (real details won't exist)
         showOrderSuccess({ orderId: order, date: new Date().toISOString(), name: 'Valued customer', email: 'you@example.com', items: [], amount: 0 }, false);
     } else if (name || email || message) {
-        // show success populated from URL params
+
         showSuccess({ name, email, message }, false);
     } else {
-        // ensure correct initial history state
         if (!window.location.hash) {
             history.replaceState({ view: 'home' }, '', window.location.pathname);
         }
